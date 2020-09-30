@@ -1,0 +1,25 @@
+.dataset-icon {
+    font-size: 4rem;
+    height: unset;
+    width: unset;
+}
+
+.border-left-custom {
+    border-left: 2px solid #DEE2E6;
+}
+
+.transformation-container {
+    &:hover{
+        background-color: #c8d1e4;
+    }
+}
+
+.mat-icon-15 {
+    font-size: 15px;
+    height: 15px;
+    width: 15px;
+}
+
+.opacity-p4 {
+    opacity: 0.4;
+}

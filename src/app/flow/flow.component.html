@@ -1,0 +1,261 @@
+<div class="d-flex flex-column h-100">
+  <mat-card class="d-flex align-items-center">
+    <mat-icon class="mr-2">mediation</mat-icon>
+
+    <div class="d-flex justify-content-between align-items-center w-100" *ngIf="!flowNameEdit; else editFlowName">
+      <h3 class="m-0 cursor-pointer">
+        {{ flow?.name }}
+      </h3>
+
+      <mat-icon (click)="flowNameEdit = true" class="text-primary cursor-pointer">create</mat-icon>
+    </div>
+
+
+    <ng-template #editFlowName>
+      <div class="form-group w-100 d-flex align-items-center">
+        <mat-form-field appearance="outline" class="w-100 mat-field-no-margin input-no-label">
+          <input matInput [value]="flow?.name" #newFlowName/>
+        </mat-form-field>
+
+        <mat-icon class="text-success mx-2 cursor-pointer" (click)="newFlowName.value && updateFlowName(newFlowName.value)" [class.opacity-p4]="!newFlowName.value">done</mat-icon>
+        <mat-icon class="text-danger cursor-pointer" (click)="flowNameEdit = false">clear</mat-icon>
+      </div>
+    </ng-template>
+
+  </mat-card>
+
+  <div class="d-flex flex-column justify-content-center align-items-center h-100" *ngIf="!flow?.nodes?.length">
+    <div class="mb-2">
+      <mat-icon class="dataset-icon">description</mat-icon>
+    </div>
+    <div>
+      <h3>Add rules into this Rule Engine.</h3>
+    </div>
+    <div>
+      <button mat-stroked-button (click)="addNewNode()">Add Datasets</button>
+    </div>
+  </div>
+
+  <div class="d-flex h-100" *ngIf="flow?.nodes?.length">
+    <div class="w-75">
+      <ngx-graph class="chart-container" [links]="flow?.links" [nodes]="flow?.nodes" [layout]="layout" [curve]="curve"
+        [update$]="update$">
+
+        <ng-template #defsTemplate>
+          <svg:marker id="arrow" viewBox="0 -5 10 10" refX="8" refY="0" markerWidth="4" markerHeight="4" orient="auto">
+            <svg:path d="M0,-5L10,0L0,5" class="arrow-head" />
+          </svg:marker>
+        </ng-template>
+
+        <ng-template #nodeTemplate let-node>
+          <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+            xmlns:xhtml="http://www.w3.org/1999/xhtml">
+            <foreignObject width="70" height="70">
+              <xhtml:div class="d-flex justify-content-center">
+                <div class="flex-column align-items-center justify-content-center">
+                  <span style="font-size: 0.4rem" class="text-primary">{{
+                    node.label
+                  }}</span>
+
+                  <div class="border rounded p-2 d-flex justify-content-center" style="border-color: #0027a0 !important"
+                    (click)="selectedDataset = node">
+                    <mat-icon style="width: 10px; height: 10px; font-size: 10px">description</mat-icon>
+                  </div>
+                </div>
+
+                <div (click)="addDataset(node)">
+                  <span style="position: relative; left: 9px; top: 14px;">
+                    <mat-icon style="
+                        width: 10px;
+                        height: 10px;
+                        font-size: 10px;
+                        background-color: #143085;
+                      " class="text-white rounded">add</mat-icon>
+                  </span>
+
+                  <span style="position: relative; top: 37px; right: 1px;">
+                    <mat-icon style="
+                        width: 10px;
+                        height: 10px;
+                        font-size: 10px;
+                      " class="text-white rounded bg-success">play_arrow</mat-icon>
+                  </span>
+                </div>
+              </xhtml:div>
+            </foreignObject>
+          </svg>
+        </ng-template>
+
+        <ng-template #linkTemplate let-link>
+          <svg:g class="edge">
+            <svg:path class="line" stroke-width="1" marker-end="url(#arrow)"></svg:path>
+          </svg:g>
+        </ng-template>
+
+      </ngx-graph>
+    </div>
+
+    <div class="border-left-custom w-25 mt-2">
+      <mat-card class="h-100 overflow-auto">
+        <mat-tab-group class="invisible-tabs" [selectedIndex]="selectedIndex">
+          <mat-tab>
+            <div class="d-flex flex-column">
+              <h3>Properties</h3>
+
+              <div class="form-group">
+                <mat-label> Dataset Name </mat-label>
+
+                <mat-form-field appearance="outline" class="w-100 mat-field-no-margin input-no-label">
+                  <input matInput [(ngModel)]="selectedDataset.label"/>
+                </mat-form-field>
+              </div>
+
+              <div class="form-group">
+                <mat-label> Priority </mat-label>
+
+                <mat-form-field appearance="outline" class="w-100 mat-field-no-margin input-no-label">
+                  <input matInput [(ngModel)]="selectedDataset.priority"/>
+                </mat-form-field>
+              </div>
+
+              <div class="form-group d-flex justify-content-between align-items-center overflow-hidden">
+                <mat-label> Root Rule? </mat-label>
+
+                <mat-checkbox class="mat-checkbox-custom" [disableRipple]="true"
+                [(ngModel)]="selectedDataset.rootRule">
+                </mat-checkbox>
+              </div>
+
+              <div class="form-group d-flex justify-content-between align-items-center overflow-hidden">
+                <mat-label> Not Check Results </mat-label>
+
+                <mat-checkbox class="mat-checkbox-custom" [disableRipple]="true" [(ngModel)]="selectedDataset.notCheck">
+                </mat-checkbox>
+              </div>
+
+              <div class="form-group">
+                <mat-label> Last Modified By </mat-label>
+
+                <mat-form-field appearance="outline" class="w-100 mat-field-no-margin input-no-label">
+                  <input matInput disabled value="Test user" />
+                </mat-form-field>
+              </div>
+
+              <div class="form-group">
+                <mat-label> Last Modified On </mat-label>
+
+                <mat-form-field appearance="outline" class="w-100 mat-field-no-margin input-no-label">
+                  <input matInput disabled value="28/09/2020" />
+                </mat-form-field>
+              </div>
+
+              <mat-accordion class="my-1">
+                <mat-expansion-panel hideToggle class="mat-elevation-z0 mat-expansion-panel-no-padding" #mep1="matExpansionPanel">
+                  <mat-expansion-panel-header class="px-1">
+                    <mat-panel-title class="m-0 d-flex align-items-center">
+                      <mat-icon>{{
+                        mep1.expanded ? "keyboard_arrow_up" : "keyboard_arrow_down"
+                      }}</mat-icon>
+                      <span class="flex-fill">Checks</span>
+                      <button mat-stroked-button (click)="$event.stopPropagation(); selectedIndex = 1; adding = 'check'">
+                        Add Check
+                      </button>
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+
+                  <mat-accordion class="my-1">
+                    <mat-expansion-panel class="mat-elevation-z0 mat-expansion-panel-no-padding" *ngFor="let check of selectedDataset?.checks">
+                      <mat-expansion-panel-header class="px-3">
+                        <mat-panel-title class="m-0 d-flex align-items-center">
+                          <mat-icon class="mr-2 text-danger mat-icon-15" (click)="$event.stopPropagation(); removeFrom('checks', check)">remove_circle</mat-icon>
+                          <span class="flex-fill">{{ check.title }}</span>
+                        </mat-panel-title>
+                      </mat-expansion-panel-header>
+                      <div class="form-group d-flex align-items-center px-3">
+                        <mat-label class="mr-2">test_field </mat-label>
+                        <div class="flex-fill overflow-hidden">
+                          <mat-form-field appearance="outline" class="mat-field-no-margin input-no-label w-100">
+                            <input matInput />
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </mat-expansion-panel>
+                  </mat-accordion>
+                </mat-expansion-panel>
+              </mat-accordion>
+
+
+              <mat-accordion class="my-1">
+                <mat-expansion-panel hideToggle class="mat-elevation-z0 mat-expansion-panel-no-padding" #mep2="matExpansionPanel">
+                  <mat-expansion-panel-header class="px-1">
+                    <mat-panel-title class="m-0 d-flex align-items-center">
+                      <mat-icon>{{
+                        mep2.expanded ? "keyboard_arrow_up" : "keyboard_arrow_down"
+                      }}</mat-icon>
+                      <span class="flex-fill">Actions</span>
+                      <button mat-stroked-button (click)="$event.stopPropagation(); selectedIndex = 1; adding = 'action'">
+                        Add Action
+                      </button>
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+
+                  <mat-accordion class="my-1">
+                    <mat-expansion-panel class="mat-elevation-z0 mat-expansion-panel-no-padding" *ngFor="let action of selectedDataset?.actions">
+                      <mat-expansion-panel-header class="px-3">
+                        <mat-panel-title class="m-0 d-flex align-items-center">
+                          <mat-icon class="mr-2 text-danger mat-icon-15" (click)="$event.stopPropagation(); removeFrom('actions', action)">remove_circle</mat-icon>
+                          <span class="flex-fill">{{ action.title }}</span>
+                        </mat-panel-title>
+                      </mat-expansion-panel-header>
+                      <div class="form-group d-flex align-items-center px-3">
+                        <mat-label class="mr-2">test_field </mat-label>
+                        <div class="flex-fill overflow-hidden">
+                          <mat-form-field appearance="outline" class="mat-field-no-margin input-no-label w-100">
+                            <input matInput />
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </mat-expansion-panel>
+                  </mat-accordion>
+                </mat-expansion-panel>
+              </mat-accordion>
+
+
+              <div class="d-flex justify-content-between align-items-center">
+                <button mat-stroked-button color="primary" (click)="updateFlowInDb(true)">Save</button>
+                <div class="d-flex justify-content-between align-items-center text-success" *ngIf="showSuccessMsg">
+                  <mat-icon class="mat-icon-15">check_circle</mat-icon>
+                  <span class="ml-1">Success!</span>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+          <mat-tab>
+              <div class="d-flex justify-content-between align-items-center">
+                <mat-icon style="font-size: 15px; height: 15px; width: 15px" (click)="selectedIndex = 0" class="cursor-pointer">arrow_back_ios
+                </mat-icon>
+                <span>Search Transformations</span>
+                <mat-icon class="mat-icon-15">clear</mat-icon>
+              </div>
+
+              <div class="mt-3">
+                <mat-form-field appearance="outline" class="w-100 mat-field-no-margin input-no-label">
+                  <span matPrefix class="position-relative" style="top: 1px">
+                    <mat-icon style="font-size: 18px; height: 18px; width: 18px" class="mr-2">search</mat-icon>
+                  </span>
+                  <input matInput placeholder="Search..." />
+                </mat-form-field>
+
+                <p class="font-weight-bold my-2">Formulas</p>
+
+                <div *ngFor="let transformation of getAvailableTransformationsForDataset()" class="mt-2 p-2 rounded transformation-container cursor-pointer" (click)="add(transformation)">
+                  <h5 class="font-weight-bold m-0">{{transformation.title}}</h5>
+                  <h6 class="mb-0">{{transformation.description}}</h6>
+                </div>
+              </div>
+          </mat-tab>
+        </mat-tab-group>
+      </mat-card>
+    </div>
+  </div>
+</div>

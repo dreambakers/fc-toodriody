@@ -1,0 +1,66 @@
+<div>
+    <div class="d-flex align-items-center">
+
+        <mat-icon class="mr-2">mediation</mat-icon>
+
+        <h3 class="m-0 mr-3">
+            Rules
+        </h3>
+
+        <button
+            mat-stroked-button
+            class="mr-2 text-primary"
+            [matMenuTriggerFor]="menu">
+            Create...
+        </button>
+
+        <button mat-stroked-button class="text-primary">...</button>
+    </div>
+
+    <mat-tab-group class="mt-2">
+        <mat-tab label="All Rules" class="text-primary">
+
+            <div class="py-2">
+                <div *ngIf="rules.length; else noRules">
+                    <mat-card
+                        class="border rounded p-3 d-flex flex-column mt-3 cursor-pointer rule-container"
+                        *ngFor="let rule of rules"
+                        (click)="gotoRule(rule)">
+                        <div>
+                            <h3 class="font-weight-bold">
+                                {{rule?.name}}
+                            </h3>
+                        </div>
+                        <div>
+                            <p>
+                                <span *ngIf="rule?.description; else noDescription">
+                                    {{rule?.description}}
+                                </span>
+                                <ng-template #noDescription>
+                                    <i>No description provided</i>
+                                </ng-template>
+                            </p>
+                        </div>
+                    </mat-card>
+                </div>
+
+                <ng-template #noRules>
+                    <mat-card class="border rounded p-3 d-flex flex-column mt-3">
+                        <div><i>No Rules found</i></div>
+                    </mat-card>
+                </ng-template>
+            </div>
+
+
+
+        </mat-tab>
+        <mat-tab label="Owner"> </mat-tab>
+    </mat-tab-group>
+
+</div>
+
+
+<mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="createFlow()" style="width: 200px;">Create Rule Engine</button>
+    <button mat-menu-item>Create Folder</button>
+</mat-menu>
