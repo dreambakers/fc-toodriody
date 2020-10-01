@@ -56,9 +56,9 @@
   </div>
 
   <div class="d-flex h-100" *ngIf="flow?.nodes?.length">
-    <div class="w-75">
+    <div class="w-75 mt-2">
       <ngx-graph class="chart-container" [links]="flow?.links" [nodes]="flow?.nodes" [layout]="layout" [curve]="curve"
-        [update$]="update$" [autoCenter]="'true'" [zoomLevel]="'2.0'">
+        [update$]="update$" [autoCenter]="'true'" [zoomLevel]="'2.0'" [showMiniMap]="true">
 
         <ng-template #defsTemplate>
           <svg:marker id="arrow" viewBox="0 -5 10 10" refX="8" refY="0" markerWidth="4" markerHeight="4" orient="auto">
