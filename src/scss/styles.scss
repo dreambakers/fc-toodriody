@@ -15,6 +15,9 @@ body {
     cursor: pointer !important;
 }
 
+.font-weight-500 {
+    font-weight: 500 !important;
+}
 
 .mat-form-field-flex { align-items: center; }
 
@@ -24,8 +27,6 @@ body {
         padding: 0;
     }
 }
-
-
 
 .mat-checkbox-custom {
     label {

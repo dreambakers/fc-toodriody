@@ -25,6 +25,7 @@ export class FlowComponent implements OnInit {
   adding = '';
   flowNameEdit = false;
   showSuccessMsg = false;
+  filteredTransformations;
 
   public curve: any = stepRound;
   public layout: Layout = new DagreNodesOnlyLayout();
@@ -94,7 +95,7 @@ export class FlowComponent implements OnInit {
   addDataset(dataset) {
     this.flow.nodes.push({
       id: `${this.flow.nodes.length + 1}`,
-      label: `Dataset ${this.flow.nodes.length + 1}`,
+      label: `Rule ${this.flow.nodes.length + 1}`,
       actions:[],
       checks: []
     });
@@ -166,6 +167,29 @@ export class FlowComponent implements OnInit {
     return this.transformations.filter(
       transformation => !takenIds.includes(transformation.id)
     );
+  }
+
+  assignCopy() {
+    this.filteredTransformations = Object.assign([], this.getAvailableTransformationsForDataset());
+  }
+
+  filterItem(value){
+    if(!value){
+      this.assignCopy();
+    } // when nothing has typed
+    this.filteredTransformations = Object.assign([], this.getAvailableTransformationsForDataset()).filter(
+      item => item.title.toLowerCase().indexOf(value.toLowerCase()) > -1
+    );
+  }
+
+  openSearch(action) {
+    this.selectedIndex = 1;
+    this.adding = action;
+    this.assignCopy();
+  }
+
+  navigateToHome() {
+    this.router.navigate(['']);
   }
 
   updateChart() {
