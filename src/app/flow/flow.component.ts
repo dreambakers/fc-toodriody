@@ -117,15 +117,16 @@ export class FlowComponent implements OnInit {
   }
 
   add(transformation) {
+    const transformationCopy = JSON.parse(JSON.stringify(transformation));
     if (this.adding === 'action') {
       this.selectedDataset.actions = [
         ...(this.selectedDataset.actions ? this.selectedDataset.actions : []),
-        transformation,
+        transformationCopy,
       ];
     } else {
       this.selectedDataset.checks = [
         ...(this.selectedDataset.checks ? this.selectedDataset.checks : []),
-        transformation,
+        transformationCopy,
       ];
     }
     this.updateFlowInDb();

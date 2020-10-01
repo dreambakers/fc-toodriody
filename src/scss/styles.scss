@@ -88,3 +88,9 @@ body {
 .mat-table {
     background: unset !important;
 }
+
+.mat-row {
+    &:hover {
+        background-color: #c8d1e4;
+    }
+}
