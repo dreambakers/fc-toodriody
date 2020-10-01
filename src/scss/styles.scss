@@ -74,3 +74,13 @@ body {
         color: $color-primary;
     }
 }
+
+.mat-success {
+    background-color: $success;
+    color: $white;
+}
+
+.mat-danger {
+    background-color: $danger;
+    color: $white;
+}

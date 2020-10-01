@@ -3,6 +3,7 @@ import { DialogService } from '../services/dialog.service';
 import { Router } from '@angular/router';
 import { EmitterService } from '../services/emitter.service';
 import { constants } from '../app.constants';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-dashboard',
@@ -25,6 +26,13 @@ export class DashboardComponent implements OnInit {
 
   createFlow() {
     this.dialogService.createFlow();
+  }
+
+  getFormatedDate(rule) {
+    if (rule.updated) {
+      return moment(rule.updated, constants.dateFormat).fromNow();
+    }
+    return '-';
   }
 
   gotoRule(rule) {

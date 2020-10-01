@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { Layout, Edge, Node } from '@swimlane/ngx-graph';
 import { DagreNodesOnlyLayout } from './customDagreNodesOnly';
 import { stepRound } from './customStepCurved';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-flow',
@@ -60,7 +61,7 @@ export class FlowComponent implements OnInit {
         switch (emitted.event) {
           case constants.emitterKeys.createFlow:
             this.flow = emitted.data;
-            this.selectedDataset = this.flow.nodes[0];
+            this.selectedDataset = this.flow?.nodes?.[0];
             return;
         }
       });
@@ -79,9 +80,10 @@ export class FlowComponent implements OnInit {
       nodes: [
         {
           id: '0',
-          label: 'Dataset 1',
+          label: 'Rule 1',
           actions:[],
-          checks: []
+          checks: [],
+          updated: moment().format(constants.dateFormat)
         },
       ],
       links: [],
@@ -89,7 +91,9 @@ export class FlowComponent implements OnInit {
     this.selectedDataset = this.flow.nodes[0];
     setTimeout(() => {
       this.updateChart();
-    }, 1000);
+    }, 100);
+
+    this.updateFlowInDb();
   }
 
   addDataset(dataset) {
@@ -97,7 +101,8 @@ export class FlowComponent implements OnInit {
       id: `${this.flow.nodes.length + 1}`,
       label: `Rule ${this.flow.nodes.length + 1}`,
       actions:[],
-      checks: []
+      checks: [],
+      updated: moment().format(constants.dateFormat)
     });
 
     this.flow.links.push({
@@ -124,12 +129,14 @@ export class FlowComponent implements OnInit {
       ];
     }
     this.updateFlowInDb();
+    this.assignCopy();
   }
 
   updateFlowName(newFlowName) {
     const rules = JSON.parse(localStorage.getItem('rules'));
     let ruleToEdit = rules.find((rule) => rule.name === this.flow.name);
     ruleToEdit.name = newFlowName;
+    ruleToEdit.updated = moment().format(constants.dateFormat);
     this.flow.name = newFlowName;
     localStorage.setItem('rules', JSON.stringify(rules));
     this.flowNameEdit = false;
@@ -155,6 +162,18 @@ export class FlowComponent implements OnInit {
         this.showSuccessMsg = false;
       }, 1000);
     }
+  }
+
+  updateSelectedDatasetUpdateDate() {
+    this.selectedDataset.updated = moment().format(constants.dateFormat);
+    return true;
+  }
+
+  getFormatedDate(date) {
+    if (date) {
+      return moment(date, constants.dateFormat).fromNow();
+    }
+    return '-';
   }
 
   getAvailableTransformationsForDataset() {

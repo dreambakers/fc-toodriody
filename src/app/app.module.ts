@@ -19,6 +19,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatRippleModule } from '@angular/material/core';
 
 import { NgxGraphModule } from '@swimlane/ngx-graph';
 
@@ -44,7 +45,8 @@ import { NgxGraphModule } from '@swimlane/ngx-graph';
     MatIconModule,
     NgxGraphModule,
     MatCheckboxModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatRippleModule
   ],
   providers: [],
   bootstrap: [AppComponent]

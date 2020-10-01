@@ -69,15 +69,15 @@
         <ng-template #nodeTemplate let-node>
           <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
             xmlns:xhtml="http://www.w3.org/1999/xhtml">
-            <foreignObject width="50" height="70">
+            <foreignObject width="50" height="70" matRipple>
               <xhtml:div class="d-flex justify-content-center">
                 <div class="flex-column align-items-center justify-content-center">
-                  <span style="font-size: 0.4rem" class="text-primary">{{
+                  <span style="font-size: 0.4rem" class="text-primary font-weight-bold">{{
                     node.label
                   }}</span>
 
                   <div class="border rounded p-2 d-flex justify-content-center" style="border-color: #0027a0 !important"
-                    (click)="selectedDataset = node">
+                    (click)="selectedDataset = node" >
                     <mat-icon style="width: 10px; height: 10px; font-size: 10px">description</mat-icon>
                   </div>
                 </div>
@@ -156,7 +156,7 @@
                 <mat-label> Last Modified On </mat-label>
 
                 <mat-form-field appearance="outline" class="w-100 mat-field-no-margin input-no-label">
-                  <input matInput disabled value="28/09/2020" />
+                  <input matInput disabled [value]="getFormatedDate(selectedDataset.updated)" />
                 </mat-form-field>
               </div>
 
@@ -168,7 +168,7 @@
                         mep1.expanded ? "keyboard_arrow_up" : "keyboard_arrow_down"
                       }}</mat-icon>
                       <span class="flex-fill">Checks</span>
-                      <button mat-stroked-button (click)="$event.stopPropagation(); selectedIndex = 1; adding = 'check'">
+                      <button mat-stroked-button (click)="$event.stopPropagation(); openSearch('check')">
                         Add Check
                       </button>
                     </mat-panel-title>
@@ -182,6 +182,22 @@
                           <span class="flex-fill">{{ check.title }}</span>
                         </mat-panel-title>
                       </mat-expansion-panel-header>
+                      <div class="form-group d-flex align-items-center px-3">
+                        <mat-label class="mr-2">test_field </mat-label>
+                        <div class="flex-fill overflow-hidden">
+                          <mat-form-field appearance="outline" class="mat-field-no-margin input-no-label w-100">
+                            <input matInput />
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="form-group d-flex align-items-center px-3">
+                        <mat-label class="mr-2">test_field </mat-label>
+                        <div class="flex-fill overflow-hidden">
+                          <mat-form-field appearance="outline" class="mat-field-no-margin input-no-label w-100">
+                            <input matInput />
+                          </mat-form-field>
+                        </div>
+                      </div>
                       <div class="form-group d-flex align-items-center px-3">
                         <mat-label class="mr-2">test_field </mat-label>
                         <div class="flex-fill overflow-hidden">
@@ -226,6 +242,22 @@
                           </mat-form-field>
                         </div>
                       </div>
+                      <div class="form-group d-flex align-items-center px-3">
+                        <mat-label class="mr-2">test_field </mat-label>
+                        <div class="flex-fill overflow-hidden">
+                          <mat-form-field appearance="outline" class="mat-field-no-margin input-no-label w-100">
+                            <input matInput />
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="form-group d-flex align-items-center px-3">
+                        <mat-label class="mr-2">test_field </mat-label>
+                        <div class="flex-fill overflow-hidden">
+                          <mat-form-field appearance="outline" class="mat-field-no-margin input-no-label w-100">
+                            <input matInput />
+                          </mat-form-field>
+                        </div>
+                      </div>
                     </mat-expansion-panel>
                   </mat-accordion>
                 </mat-expansion-panel>
@@ -233,7 +265,7 @@
 
 
               <div class="d-flex justify-content-between align-items-center">
-                <button mat-stroked-button color="primary" (click)="updateFlowInDb(true)">Save</button>
+                <button mat-stroked-button color="primary" (click)="updateSelectedDatasetUpdateDate() && updateFlowInDb(true)">Save</button>
                 <div class="d-flex justify-content-between align-items-center text-success" *ngIf="showSuccessMsg">
                   <mat-icon class="mat-icon-15">check_circle</mat-icon>
                   <span class="ml-1">Success!</span>

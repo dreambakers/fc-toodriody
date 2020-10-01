@@ -19,40 +19,37 @@
 
     <mat-tab-group class="mt-2">
         <mat-tab label="All Rules" class="text-primary">
-
-            <div class="py-2">
+            <div class="mt-5">
                 <div *ngIf="rules.length; else noRules">
-                    <mat-card
-                        class="border rounded p-3 d-flex flex-column mt-3 cursor-pointer rule-container"
+                    <div
+                        class="border-top border-bottom p-2 d-flex align-items-center justify-content-between cursor-pointer rule-container"
                         *ngFor="let rule of rules"
                         (click)="gotoRule(rule)">
-                        <div>
-                            <h3 class="font-weight-bold">
-                                {{rule?.name}}
-                            </h3>
+                        <div class="text-primary">
+                            {{rule?.name}}
                         </div>
-                        <div>
-                            <p>
-                                <span *ngIf="rule?.description; else noDescription">
-                                    {{rule?.description}}
-                                </span>
-                                <ng-template #noDescription>
-                                    <i>No description provided</i>
-                                </ng-template>
-                            </p>
+
+                        <div class="d-flex align-items-center justify-content-between">
+
+                            <div class="mr-5">
+                                {{ getFormatedDate(rule) }}
+                            </div>
+
+                            <div>
+                                <button mat-stroked-button color="primary" class="mr-1">Run</button>
+                                <button mat-stroked-button color="primary" class="mr-1">Edit</button>
+                                <button mat-stroked-button color="primary">Delete</button>
+                            </div>
+
                         </div>
-                    </mat-card>
+
+                    </div>
                 </div>
 
                 <ng-template #noRules>
-                    <mat-card class="border rounded p-3 d-flex flex-column mt-3">
-                        <div><i>No Rules found</i></div>
-                    </mat-card>
+                    <div><i>No Rules found</i></div>
                 </ng-template>
             </div>
-
-
-
         </mat-tab>
         <mat-tab label="Owner"> </mat-tab>
     </mat-tab-group>

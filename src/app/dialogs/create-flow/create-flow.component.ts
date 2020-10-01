@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { constants } from '../../app.constants';
 import { EmitterService } from '../../services/emitter.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-create-flow',
@@ -30,7 +31,7 @@ export class CreateFlowComponent implements OnInit {
 
   onSubmit() {
     const rules = localStorage.getItem('rules') ? JSON.parse(localStorage.getItem('rules')) : [];
-    rules.push(this.createFlowForm.value);
+    rules.push({... this.createFlowForm.value, updated: moment().format(constants.dateFormat)});
     localStorage.setItem('rules', JSON.stringify(rules));
 
     this.router.navigate(['flow']).then(() => {
