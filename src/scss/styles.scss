@@ -84,3 +84,7 @@ body {
     background-color: $danger;
     color: $white;
 }
+
+.mat-table {
+    background: unset !important;
+}

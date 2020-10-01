@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { FlowComponent } from './flow/flow.component';
 import { CreateFlowComponent } from './dialogs/create-flow/create-flow.component';
+import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.component';
 
 import { MatInputModule } from '@angular/material/input';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -20,6 +21,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatRippleModule } from '@angular/material/core';
+import { MatTableModule } from '@angular/material/table';
 
 import { NgxGraphModule } from '@swimlane/ngx-graph';
 
@@ -29,6 +31,7 @@ import { NgxGraphModule } from '@swimlane/ngx-graph';
     DashboardComponent,
     CreateFlowComponent,
     FlowComponent,
+    ConfirmDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -46,7 +49,8 @@ import { NgxGraphModule } from '@swimlane/ngx-graph';
     NgxGraphModule,
     MatCheckboxModule,
     MatExpansionModule,
-    MatRippleModule
+    MatRippleModule,
+    MatTableModule
   ],
   providers: [],
   bootstrap: [AppComponent]

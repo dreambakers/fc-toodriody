@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { EmitterService } from '../services/emitter.service';
 import { constants } from '../app.constants';
 import * as moment from 'moment';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,6 +14,8 @@ import * as moment from 'moment';
 export class DashboardComponent implements OnInit {
 
   rules;
+  dataSource;
+  displayedColumns: string[] = ['name', 'description', 'modified', 'actions'];
 
   constructor(
     private dialogService: DialogService,
@@ -22,6 +25,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.rules = localStorage.getItem('rules') ? JSON.parse(localStorage.getItem('rules')) : [];
+    this.dataSource = new MatTableDataSource(this.rules);
   }
 
   createFlow() {
@@ -41,6 +45,18 @@ export class DashboardComponent implements OnInit {
         this.emitterService.emit(constants.emitterKeys.createFlow, rule);
       }, 10);
     });
+  }
+
+  deleteRule(rule) {
+    this.dialogService.confirm('Are you sure?', 'This will delete the selected rule.').subscribe(
+      res => {
+        if (res) {
+          this.rules = this.rules.filter(_rule => rule.name !== _rule.name);
+          localStorage.setItem('rules', JSON.stringify(this.rules));
+          this.dataSource.data = this.rules;
+        }
+      }
+    );
   }
 
 }

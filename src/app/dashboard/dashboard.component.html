@@ -3,9 +3,9 @@
 
         <mat-icon class="mr-2">mediation</mat-icon>
 
-        <h3 class="m-0 mr-3">
+        <h2 class="m-0 mr-3 font-weight-500">
             Rules
-        </h3>
+        </h2>
 
         <button
             mat-stroked-button
@@ -20,30 +20,66 @@
     <mat-tab-group class="mt-2">
         <mat-tab label="All Rules" class="text-primary">
             <div class="mt-5">
-                <div *ngIf="rules.length; else noRules">
-                    <div
-                        class="border-top border-bottom p-2 d-flex align-items-center justify-content-between cursor-pointer rule-container"
-                        *ngFor="let rule of rules"
-                        (click)="gotoRule(rule)">
-                        <div class="text-primary">
-                            {{rule?.name}}
-                        </div>
+                <div class="desktop-table" *ngIf="rules.length; else noRules">
+                    <mat-table #table [dataSource]="dataSource">
+                      <ng-container matColumnDef="name">
+                        <mat-header-cell *matHeaderCellDef class="text-dark">
+                            Name
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let rule" class="text-ellipsis">
+                          <span class="text-ellipsis d-flex align-items-center">
+                            <mat-icon class="mr-2">mediation</mat-icon>
+                            {{rule.name}}
+                          </span>
+                        </mat-cell>
+                      </ng-container>
 
-                        <div class="d-flex align-items-center justify-content-between">
+                      <ng-container matColumnDef="description">
+                        <mat-header-cell *matHeaderCellDef class="text-dark">
+                            Description
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let rule" class="text-ellipsis">
+                          <span class="text-ellipsis" *ngIf="rule.description; else noDescription">
+                            {{rule.description}}
+                          </span>
+                          <ng-template #noDescription>
+                            <i class="text-muted">No description</i>
+                          </ng-template>
 
-                            <div class="mr-5">
-                                {{ getFormatedDate(rule) }}
-                            </div>
+                        </mat-cell>
+                      </ng-container>
 
-                            <div>
-                                <button mat-stroked-button color="primary" class="mr-1">Run</button>
-                                <button mat-stroked-button color="primary" class="mr-1">Edit</button>
-                                <button mat-stroked-button color="primary">Delete</button>
-                            </div>
+                      <ng-container matColumnDef="modified">
+                        <mat-header-cell *matHeaderCellDef class="text-dark">
+                            Modified
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let rule" class="text-ellipsis">
+                          <span class="text-ellipsis">
+                            {{ getFormatedDate(rule) }}
+                          </span>
+                        </mat-cell>
+                      </ng-container>
 
-                        </div>
+                      <ng-container matColumnDef="actions">
+                        <mat-header-cell *matHeaderCellDef class="text-dark">
+                            Actions
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let rule" class="text-ellipsis d-flex">
+                            <button mat-stroked-button color="success" class="mr-1">Run</button>
 
-                    </div>
+                            <button mat-icon-button class="text-primary mr-1" (click)="gotoRule(rule)">
+                                <mat-icon>create</mat-icon>
+                            </button>
+
+                            <button mat-icon-button class="text-danger mr-1" (click)="deleteRule(rule)">
+                                <mat-icon>clear</mat-icon>
+                            </button>
+                        </mat-cell>
+                      </ng-container>
+
+                      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                    </mat-table>
                 </div>
 
                 <ng-template #noRules>
